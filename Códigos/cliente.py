@@ -5,7 +5,7 @@ import pickle
 import os.path
 
 class Cliente():
-    def __init__(self,nome,endereco,email,cpf):
+    def __init__(self, nome, endereco, email, cpf):
         self.__nome = nome
         self.__endereco = endereco
         self.__email = email
@@ -85,6 +85,7 @@ class LimiteCadastroCliente(tk.Toplevel):
 
 class CtrlCliente():
     def __init__(self):
+        
         #Verificação arquivo pickle com lista de clientes
         if not os.path.isfile('clientes.pickle'):
             self.listaClientes = []
@@ -92,11 +93,11 @@ class CtrlCliente():
             with open('clientes.pickle', 'rb') as f:
                 self.listaClientes = pickle.load(f)
         
-    #métodos para criação dos limites
+    #método para criação do limite do cadastro de clientes
     def cadastraCliente(self):
         self.limiteCadastraCliente = LimiteCadastroCliente(self)
         
-    #Callbacks de cadastro de cliente
+    #callbacks de cadastro de cliente
     def cadastraHandler(self, event):
         nome = self.limiteCadastraCliente.inputNome.get()
         endereco = self.limiteCadastraCliente.inputEndereco.get()
@@ -143,7 +144,7 @@ class CtrlCliente():
         if not aux:
             messagebox.showinfo('Erro', 'Não há cliente com esse CPF')
             
-    #métodos de instanciação
+    #método de instanciação para controladores externos
     def getListaClientes(self):
         return self.listaClientes
             

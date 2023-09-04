@@ -47,7 +47,7 @@ class ControlePrincipal():
 
         self.root.title("Loja de Confecções")
         
-        # Inicia o mainloop
+        #inicia o mainloop
         self.root.mainloop()
 
     def cadastrarMercadoria(self):

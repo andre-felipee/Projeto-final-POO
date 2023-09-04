@@ -164,7 +164,7 @@ class CtrlVenda():
             with open('vendas.pickle', 'rb') as f:
                 self.listaNotas = pickle.load(f)
 
-    #Callbacks de emissão de nota fiscal            
+    #criação do limite de criação de uma nota, com verificação de cliente no sistema            
     def emitirNota(self):
         self.listaMercNota = []
         self.cpf = simpledialog.askinteger('Emissão de nota', 'Insira o CPF do cliente')
@@ -179,9 +179,11 @@ class CtrlVenda():
             messagebox.showinfo('Erro', 'Cliente não cadastrado')
             self.ctrlPrincipal.ctrlCliente.cadastraCliente()
             
+    #criação do limite de inserção de produtos na nota
     def adicionarProduto(self, event):
         self.limiteAdiciona = LimiteAdicionaProd(self)
         
+    #cancelamento da nota fiscal
     def cancelaHandler(self, event):
         listaProdutos = self.ctrlPrincipal.ctrlEstoque.getListaProdutos()
         for prod in listaProdutos:
@@ -192,6 +194,7 @@ class CtrlVenda():
                     self.limiteEmite.mostraJanela('Sucesso', 'Nota fiscal cancelada')
                     self.limiteEmite.destroy()
 
+    #callback de fechamento da nota e persistência no sistema
     def fechaNota(self, event):
         valorMerc = 0
         valorTotal = 0
@@ -202,22 +205,24 @@ class CtrlVenda():
         ano = self.limiteEmite.inputAno.get()
         nota = NotaFiscal(self.cpf, num, self.listaMercNota, dia, mes, ano)
         self.listaNotas.append(nota)
+        
         if len(self.listaNotas) != 0:
             with open('vendas.pickle', 'wb') as f:
                 pickle.dump(self.listaNotas, f)
+        
         #contador pro valor total
         for merc in self.listaMercNota:
             valorMerc = int(merc.valorVenda) * int(merc.quant)
             valorTotal += valorMerc
+        
         msg += str(valorTotal)
         self.limiteEmite.mostraJanela('Nota emitida', msg)
         self.fechaJanela(event)
-            
         
     def fechaJanela(self, event):
         self.limiteEmite.destroy()
         
-    #Callbacks de inserção de produtos na nota
+    #callback de inserção de produtos na nota
     def inserirHandler(self, event):
         msg = ''
         msg2 = ''
@@ -229,6 +234,7 @@ class CtrlVenda():
             if int(codigo) == int(prod.codigoNumerico):
                 aux = True
                 if int(quant) <= int(prod.quant):
+                    
                     #mostragem dos produtos na tela
                     self.limiteEmite.textProdutos.config(state=tk.NORMAL)
                     msg += 'Produto: '+ prod.descricao + '\n'
@@ -237,9 +243,11 @@ class CtrlVenda():
                     msg += '\n' 
                     self.limiteEmite.textProdutos.insert(tk.END, msg)
                     self.limiteEmite.textProdutos.config(state=tk.DISABLED)
+                    
                     #alteração do estoque do produto
                     prod.quant -= int(quant)
                     self.ctrlPrincipal.ctrlEstoque.atualizaEstoque(listaProdutos)
+                    
                     #inserção do produto em uma lista temporária para criação de uma instância de nota
                     codigo = prod.codigoNumerico
                     valorVenda = prod.valorVenda

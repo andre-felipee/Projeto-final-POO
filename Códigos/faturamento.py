@@ -9,6 +9,7 @@ class CtrlFaturamento():
     def mostraJanela(self, titulo, msg):
         messagebox.showinfo(titulo, msg)    
 
+    #método para consulta de faturamento por produto
     def consultarFatProduto (self):
         codProduto = simpledialog.askinteger('Consultar Faturamento do Produto', 'Insira o código do produto')
         listaNotasFiscais = self.ctrlPrincipal.ctrlVenda.getListaNotasFiscais()
@@ -21,6 +22,7 @@ class CtrlFaturamento():
                     fatTotal += valorProd
         self.mostraJanela(f'Faturamento do produto: {codProduto}',f'R${fatTotal}')        
 
+    #método para consulta de faturamento por cliente
     def consultarFatCliente (self):
         codCliente = simpledialog.askinteger('Consulta Faturamento do Cliente', 'Insira o CPF do cliente')
         listaNotasFiscais = self.ctrlPrincipal.ctrlVenda.getListaNotasFiscais()

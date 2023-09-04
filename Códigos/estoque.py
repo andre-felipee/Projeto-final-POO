@@ -114,11 +114,11 @@ class CtrlEstoque():
             with open('estoque.pickle', 'rb') as f:
                 self.listaProdutos = pickle.load(f)
                 
-    #Métodos de criação dos limites
+    #método de criação do limite de cadastro de uma mercadoria
     def cadastraMercadoria(self):
         self.limiteCadastro = LimiteCadastroMercadoria(self)
 
-    #Callbacks de cadastro de Produto
+    #callback de cadastro de produto com verificação de estoque 
     def enterHandlerCadastro(self, event):
         codigo = int(self.limiteCadastro.inputCodigo.get())
         descricao = self.limiteCadastro.inputDescricao.get()
@@ -146,7 +146,7 @@ class CtrlEstoque():
             else:
                 break
             return
-        objMercadoria = Mercadoria(codigo,descricao,precoCompra,valorVenda,quant)
+        objMercadoria = Mercadoria(codigo, descricao, precoCompra, valorVenda, quant)
         self.listaProdutos.append(objMercadoria)
         self.limiteCadastro.mostraJanela("Sucesso", "Produto cadastrado!")
         self.clearHandlerCadastro(event)
@@ -158,13 +158,14 @@ class CtrlEstoque():
         self.limiteCadastro.inputValorVenda.delete(0, len(self.limiteCadastro.inputValorVenda.get()))
         self.limiteCadastro.inputQuant.delete(0, len(self.limiteCadastro.inputQuant.get()))
 
+    #callback para fechar a janela e persistir informações no sistema
     def closeHandlerCadastro(self, event):
         if len(self.listaProdutos) != 0:
             with open('estoque.pickle', 'wb') as f:
                 pickle.dump(self.listaProdutos, f)
         self.limiteCadastro.destroy()
 
-    #método de consulta de produtos
+    #callback de consulta de produtos
     def consultarMercadoria(self):
         msg = ''
         codParam = simpledialog.askinteger('Consulta de Mercadoria', 'Insira o código da mercadoria: ')
@@ -179,7 +180,7 @@ class CtrlEstoque():
             messagebox.showinfo('Erro', 'Não há mercadoria com esse código')
         messagebox.showinfo('Mercadoria encontrada', msg)
         
-    #Métodos de instanciação
+    #Métodos de instanciação para controladores externos
     def getListaProdutos(self):
         return self.listaProdutos
     
