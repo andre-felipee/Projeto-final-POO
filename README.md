@@ -4,6 +4,7 @@
  Módulos utilizados: 
  - Tkinter: para criação das interfaces gráficas
  - Pickle: para persistência de dados
+ - Os.Path: verificação dos arquivos pickle
 
  Funcionalidades:
  - Controle de estoque: adição e consulta de produtos
